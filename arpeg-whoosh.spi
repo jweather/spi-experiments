@@ -1,0 +1,47 @@
+define :arp do |r, pan, amp|
+  with_fx :reverb, mix: 0.2 do
+    use_synth :beep
+    play_pattern_timed [r, r+3, r+6, r+3, r+6, r+9, r+6, r+9, r+12], 0.2, release: 0.2, pan: pan, amp: amp
+  end
+end
+
+note = 65
+
+live_loop :arpeg do
+  #ping-pong stereo echo
+  cue :beat
+  in_thread {arp note, 0, 1}
+  sleep 0.1
+  in_thread {arp note, -1, 0.8}
+  sleep 0.1
+  in_thread {arp note, 1, 0.6}
+  sleep 1.6
+  note = note + [3, -3, 6, -6].choose
+  #  note = note + [2, -2].choose if one_in(6)
+  if(note < 50)
+    note = note + 12
+  end
+  if (note > 80)
+    note = note - 12
+  end
+end
+
+live_loop :whoosh do
+  with_fx :reverb do
+    use_synth :gnoise
+    play 50, attack: rrand(0.2,0.7), release: 4, amp: 0.2, cutoff: rrand(70, 90), pan: rrand(-0.2, 0.2)
+    sleep rrand(1.8, 2.2)
+  end
+end
+
+live_loop :bass do
+  sync :beat
+  sample :perc_bell, amp: 0.2, rate: rrand(0.2,0.5) if one_in(4)
+  uncomment do
+    use_synth :dsaw
+    c = rrand(60, 90)
+    n = play note-[36,24].choose, attack: 0.5, release: 2, amp: rrand(0.2, 0.4),
+      cutoff_slide: 2, cutoff: c
+    control n, cutoff: c+30
+  end
+end

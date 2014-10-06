@@ -1,0 +1,43 @@
+define :bing do |r|
+  cue :bing
+  in_thread{bass r}
+  with_fx :reverb, mix: 0.2 do
+    use_synth :mod_dsaw
+    play r, release: 3, mod_phase: 0.05, mod_range: 3
+    sleep 0.5
+    play r+5, release: 2, mod_phase: 0.05
+    sleep 2.5
+  end
+end
+
+define :mel do
+  bing 65
+  bing 67
+  bing 62
+  bing 64
+end
+
+define :perc do
+  with_fx :echo, phase: 0.25, mix: 0.5 do
+    sync :bing
+    sample :drum_heavy_kick, amp: 5
+
+    sleep 0.5
+    4.times do
+      sample :drum_cymbal_closed, amp: rrand(0.7, 1)
+      sleep 0.5
+    end
+    sample [:drum_cymbal_closed, :drum_cymbal_open].choose, amp: 0.5
+  end
+end
+
+define :bass do |r|
+  with_fx :echo do
+    use_synth :tb303
+    play [r-36, r-48], release: rrand(1, 3)
+  end
+end
+
+in_thread(name: :mel){loop{mel}}
+sleep 3*4
+in_thread(name: :perc){loop{perc}}
