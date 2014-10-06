@@ -6,7 +6,7 @@ Sonic Pi experiments
 Check out Sonic Pi here: http://www.sonic-pi.net
 
 Arpeg Whoosh
-<a href="https://soundcloud.com/jweather/arpeg-whoosh-1"><img src="https://raw.githubusercontent.com/jweather/spi-experiments/master/arpeg-whoosh.png"></a>
+<a href="https://soundcloud.com/jweather/arpeg-whoosh"><img src="https://raw.githubusercontent.com/jweather/spi-experiments/master/arpeg-whoosh.png"></a>
 source: https://github.com/jweather/spi-experiments/blob/master/arpeg-whoosh.spi
 
 Deepsaw
