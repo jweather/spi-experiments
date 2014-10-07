@@ -1,0 +1,54 @@
+require 'net/http'
+require 'xmlsimple' # gem install xml-simple
+freesound(237729) # cache for a rainy day
+freesound(181497)
+
+# get your location's WOEID here: http://zourbuth.com/tools/woeid/
+define :wx do |woeid|
+  url = 'http://weather.yahooapis.com/forecastrss?w=' + woeid.to_s
+  xml = XmlSimple.xml_in(Net::HTTP.get_response(URI(url)).body)
+  item = xml['channel'][0]['item'][0]
+  conditions = item['condition'][0]
+  cond = conditions['text'].downcase
+  
+  forecast = item['forecast']
+  temps = []
+  temps.push(conditions['temp'].to_i)
+  3.times do |i|
+    temps.push(forecast[i]['high'].to_i)
+  end
+  temps = temps.map{|i| i+(40-temps.min)} if temps.min < 40 # too cold to play!
+  return cond, temps
+end
+
+define :playwx do |cond, temps|
+  puts cond + ', temps ' + temps.inspect
+
+  chord = :major
+  chord = :minor if cond =~ /cloudy/
+  puts chord
+
+  sample freesound(237729), amp:4, start:0.1, finish:0.25 if cond =~ /rain|shower|storm/
+  sample freesound(181497), amp:4 if cond =~ /snow/
+
+  play chord(temps[0], chord)
+  sleep 2
+  play_pattern temps
+end
+
+cond, temps = wx 12767849       # Lynchburg, VA
+playwx cond, temps
+sleep 1
+
+cond, temps = wx 12797130       # Mountain View, CA
+playwx cond, temps
+sleep 1
+
+cond, temps = wx 44418          # London
+playwx cond, temps
+sleep 1
+
+cond, temps = wx 2477096        # Prudhoe Bay, Alaska
+cond = 'snow'
+playwx cond, temps
+sleep 1
