@@ -22,6 +22,6 @@ At the tone, the weather will be...
 source: https://github.com/jweather/spi-experiments/blob/master/weathertone.spi
 
 Mario Theme on floppy drives
-<iframe width="560" height="315" src="//www.youtube.com/embed/VTq0CR2vYZc" frameborder="0" allowfullscreen></iframe>
+<a href="https://youtube.com/watch?v=VTq0CR2vYZc"><img src="https://raw.githubusercontent.com/jweather/spi-experiments/master/floppy.png"></a>
 source: https://github.com/jweather/spi-experiments/blob/master/floppy.spi
 and Arduino: https://github.com/jweather/spi-experiments/blob/master/floppy.ino
