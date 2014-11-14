@@ -1,6 +1,3 @@
-spi-experiments
-===============
-
 # Sonic Pi experiments
 
 * [Arpeg Whoosh](#arpeg-whoosh)
