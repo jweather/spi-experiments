@@ -5,6 +5,7 @@
 * [Lupe](#lupe)
 * [Weathertone](#weathertone)
 * [Floppy](#floppy)
+* [Thing 1](#thing1)
 
 Check out Sonic Pi here: http://www.sonic-pi.net
 
@@ -32,6 +33,6 @@ source: https://github.com/jweather/spi-experiments/blob/master/floppy.spi
 and Arduino: https://github.com/jweather/spi-experiments/blob/master/floppy.ino
 
 
-Thing 1
+# <a name="thing1"></a>Thing 1
 <a href="https://soundcloud.com/jweather/thing1"><img src="https://raw.githubusercontent.com/jweather/spi-experiments/master/thing1.png"></a>
 source: https://github.com/jweather/spi-experiments/blob/master/thing1.spi
