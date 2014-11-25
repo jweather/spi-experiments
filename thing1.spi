@@ -1,0 +1,87 @@
+define :pattern do |pat, sam, opt={}|
+  randamp = (opt[:amp] == nil)
+  pat.split(//).each do |p|
+    opt[:amp] = rrand(0.7, 0.9) if randamp
+    sample sam, opt if p != '0' and one_in(p.to_i)
+    sleep 0.25
+  end
+end
+
+[
+  ['1200000012000000',  :drum_bass_hard],
+  ['1413',              :drum_cymbal_soft],
+  ['00302110',          :drum_bass_soft],
+  ['00001000',          :drum_snare_hard],
+  ['00020550',          :drum_snare_soft],
+  ['03030',             :drum_cymbal_hard],  # <3 odd patterns
+  ['10000000',          :loop_garzul, {amp: 0.4}],
+  ['80000000',          :elec_filt_snare, {amp: 2}],
+  ['09000000',          :drum_tom_hi_hard, {amp: 1.5}],
+  ['00900000',          :drum_tom_mid_hard, {amp: 1.2}]
+].each_with_index do |p, i|
+  live_loop(p[1]) { pattern *p }
+  sleep 4 if i < 8
+end
+
+r = note(:e1)
+
+live_loop :bass do
+  sync :drum_bass_hard
+  cue :bar
+  with_fx [:slicer, :ixi_techno, :rlpf].choose, phase_offset: 0.5 do
+    use_synth :dsaw
+    n = chord(r, 'm+5').choose
+    play n, sustain: rrand(3,4)
+    sleep 2
+    play n+24, sustain: 1, amp: 0.8 if one_in(3)
+    sleep 2
+  end
+  r = r + rrand_i(-5, 5)
+  r += 12 if r < 28
+  r -= 12 if r > 54
+end
+
+sleep 8
+
+live_loop :arp do
+  sync :bar
+  use_synth :fm
+  n = r + 12*5
+  with_fx :reverb do
+    32.times do
+      play n+[-12,-5,0,5,12,17].choose, release: 0.25,
+        amp: 0.2 + (Math.sin(vt/2)+2)/2.0*0.6
+      sleep 0.125
+    end
+  end
+end
+
+sleep 16
+
+live_loop :mel do
+  sync :bar
+  with_fx :reverb do
+    use_synth :pretty_bell
+    use_synth_defaults amp: 2
+    n = r + 12*2
+    if one_in(3) then
+      play chord(n, :m7)
+      sleep 2/3.0
+      play chord(n, :m7), release: 1/3.0
+      sleep 1/3.0
+    else
+      play chord(n, :minor)
+      sleep 1
+    end
+    sleep 1
+    if one_in(3) then
+      6.times do |i|
+        play chord(n, :m13)[i], amp: 3, release: 0.25
+        sleep 0.125
+      end
+    elsif one_in(2) then
+      play chord(n, :sus4) if one_in(3)
+    end
+  end
+end
+
